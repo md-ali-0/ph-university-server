@@ -1,28 +1,29 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import sendResponse from '../../utils/sendResponse';
 import { UserService } from './user.service';
-import userValidationSchema from './user.validation';
+// import userValidationSchema from './user.validation';
 
-const createStudent = async (req: Request, res: Response) => {
+const createStudent = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
     try {
-        const payload = req.body;
+        const { password, student: studentData } = req.body;
 
-        const zodParseData = userValidationSchema.parse(payload)
+        // const zodParseData = userValidationSchema.parse(payload)
 
-        const result = await UserService.createStudent(zodParseData);
+        const result = await UserService.createStudent(password, studentData);
 
-        res.status(201).json({
-            status: true,
-            massage: 'Student Created Successfully',
+        sendResponse(res, {
+            statusCode: httpStatus.ACCEPTED,
+            success: true,
+            message: 'Student Created Successfully',
             data: result,
         });
-    } catch (error : any) {
-        console.log(error);
-        
-        res.status(500).json({
-            status: false,
-            massage: error.massage || 'Something Went Wrong',
-            error: error,
-        });
+    } catch (error) {
+        next(error);
     }
 };
 

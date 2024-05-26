@@ -4,7 +4,11 @@ import { UserRoute } from '../modules/user/user.route';
 
 const router = Router();
 
-router.use('/student', StudentRoute);
-router.use('/user', UserRoute);
+const moduleRoutes = [
+    {path : '/student', route: StudentRoute},
+    {path : '/user', route: UserRoute},
+]
 
-export default router;
+moduleRoutes.forEach(route=>router.use(route.path, route.route))
+
+export default router ;

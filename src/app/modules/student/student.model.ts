@@ -1,7 +1,6 @@
-import bcrypt from 'bcrypt';
+
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
-import config from '../../config';
 import { IStudent, IUserName, StudentModel } from './student.interface';
 
 const UserNameSchema = new Schema<IUserName>(
@@ -40,10 +39,15 @@ const UserNameSchema = new Schema<IUserName>(
 
 const StudentSchema = new Schema<IStudent, StudentModel>(
     {
-        id: { type: Number, required: true },
+        id: { type: String, required: [true, 'Id is Required'] },
+        user: {
+            type: Schema.Types.ObjectId,
+            required: [true, 'User Id is Required'],
+            ref: 'User',
+            unique: true,
+        },
         name: { type: UserNameSchema, required: true },
         age: { type: Number, required: true },
-        password: { type: String, required: true },
         email: {
             type: String,
             required: true,
@@ -75,17 +79,10 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
     },
 );
 
-// before
-StudentSchema.pre('save', async function(next){
-    const user = this
-    user.password =  await bcrypt.hash(this.password, config.salt);
-    next()
-})
-StudentSchema.post('save', function(doc, next){
-    console.log('after');
-    
-})
-
+// StudentSchema.post('save', function (doc, next) {
+//     console.log('after');
+//     next();
+// });
 
 // for creating static
 
