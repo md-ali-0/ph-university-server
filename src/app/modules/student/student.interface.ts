@@ -12,9 +12,10 @@ export type IStudent = {
     age: number;
     email: string;
     gender: 'male' | 'female';
-    dateOfBirth?: string;
+    dateOfBirth?: Date;
     contact?: string;
     avatar?: string;
+    admissionSemester: Types.ObjectId;
     bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
 };

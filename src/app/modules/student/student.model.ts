@@ -1,4 +1,3 @@
-
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import { IStudent, IUserName, StudentModel } from './student.interface';
@@ -39,7 +38,11 @@ const UserNameSchema = new Schema<IUserName>(
 
 const StudentSchema = new Schema<IStudent, StudentModel>(
     {
-        id: { type: String, required: [true, 'Id is Required'] },
+        id: {
+            type: String,
+            required: true,
+            unique: true
+        },
         user: {
             type: Schema.Types.ObjectId,
             required: [true, 'User Id is Required'],
@@ -65,17 +68,23 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
             },
             required: true,
         },
-        dateOfBirth: { type: String, trim: true },
+        dateOfBirth: { type: Date, trim: true },
         contact: { type: String, trim: true },
         avatar: { type: String, trim: true },
         bloodGroup: {
             type: String,
             enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
         },
+        admissionSemester: {
+            type: Schema.Types.ObjectId,
+            ref: 'AcademicSemester',
+            required: true,
+        },
         presentAddress: { type: String, trim: true },
     },
     {
         versionKey: false,
+        timestamps: true,
     },
 );
 

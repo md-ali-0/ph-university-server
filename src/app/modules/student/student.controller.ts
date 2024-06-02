@@ -1,43 +1,30 @@
-import { Request, Response } from 'express';
+import httpStatus from 'http-status';
+import { catchAsync } from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 import { StudentService } from './student.service';
 
-const getAllStudents = async (req: Request, res: Response) => {
-    try {
-        const result = await StudentService.getAllStudents();
+const getAllStudents = catchAsync(async (req, res) => {
+    const result = await StudentService.getAllStudents();
 
-        res.status(201).json({
-            status: true,
-            massage: 'Students Data Get Successfully',
-            data: result,
-        });
-    } catch (error) {
-        console.log(error);
-        
-        res.status(500).json({
-            status: false,
-            massage: 'Something Went Wrong',
-            error,
-        });
-    }
-};
-const getSingleStudent = async (req: Request, res: Response) => {
-    try {
-        const id = req.params.id;
-        const result = await StudentService.getSingleStudent(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student fetched Successfully',
+        data: result,
+    });
+});
 
-        res.status(201).json({
-            status: true,
-            massage: 'Students Data Get Successfully',
-            data: result,
-        });
-    } catch (error) {
-        res.status(500).json({
-            status: true,
-            massage: 'Something Went Wrong',
-            error: error,
-        });
-    }
-};
+const getSingleStudent = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const result = await StudentService.getSingleStudent(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student fetched Successfully',
+        data: result,
+    });
+})
 
 export const StudentController = {
     getAllStudents,
