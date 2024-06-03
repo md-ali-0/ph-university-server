@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { Types } from 'mongoose';
+import AppError from '../../error/AppError';
 import { academicSemesterNameCodeMapper } from './academicSemester.constance';
 import { IAcademicSemester } from './academicSemester.interface';
 import { AcademicSemester } from './academicSemester.model';
@@ -6,9 +8,8 @@ import { AcademicSemester } from './academicSemester.model';
 const createAcademicSemester = async (
     payload: IAcademicSemester,
 ): Promise<IAcademicSemester> => {
-
     if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
-        throw new Error('Semester Code Not Match !');
+        throw new AppError(httpStatus.NOT_FOUND, 'Semester Code Not Match !');
     }
 
     const academicSemester = await AcademicSemester.create(payload);

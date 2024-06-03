@@ -15,6 +15,7 @@ export type IStudent = {
     dateOfBirth?: Date;
     contact?: string;
     avatar?: string;
+    academicDepartment: Types.ObjectId;
     admissionSemester: Types.ObjectId;
     bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;

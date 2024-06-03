@@ -75,6 +75,11 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
             type: String,
             enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
         },
+        academicDepartment: {
+            type: Schema.Types.ObjectId,
+            ref: 'AcademicDepartment',
+            required: true,
+        },
         admissionSemester: {
             type: Schema.Types.ObjectId,
             ref: 'AcademicSemester',

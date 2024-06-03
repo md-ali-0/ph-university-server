@@ -20,7 +20,8 @@ const updateAcademicDepartment = async (
 };
 
 const getAllAcademicDepartments = async (): Promise<IAcademicDepartment[]> => {
-    const academicDepartments = await AcademicDepartment.find().populate('academicFaculty');
+    const academicDepartments =
+        await AcademicDepartment.find().populate('academicFaculty');
     return academicDepartments;
 };
 
@@ -29,7 +30,7 @@ const getSingleAcademicDepartment = async (
 ): Promise<IAcademicDepartment | null> => {
     const academicDepartment = await AcademicDepartment.findOne({
         _id: new Types.ObjectId(id),
-    });
+    }).populate('academicFaculty');
     return academicDepartment;
 };
 
