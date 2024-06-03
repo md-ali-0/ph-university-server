@@ -11,26 +11,26 @@ const updateAcademicFaculty = async (
     id: string,
     payload: IAcademicFaculty,
 ): Promise<IAcademicFaculty | null> => {
-    const academicSemester = await AcademicFaculty.findByIdAndUpdate(
+    const academicFaculty = await AcademicFaculty.findByIdAndUpdate(
         id,
         payload,
         { new: true },
     );
-    return academicSemester;
+    return academicFaculty;
 };
 
 const getAllAcademicFaculties = async (): Promise<IAcademicFaculty[]> => {
-    const academicSemesters = await AcademicFaculty.find();
-    return academicSemesters;
+    const academicFaculties = await AcademicFaculty.find();
+    return academicFaculties;
 };
 
 const getSingleAcademicFaculty = async (
     id: string,
 ): Promise<IAcademicFaculty | null> => {
-    const academicSemester = await AcademicFaculty.findOne({
+    const academicFaculty = await AcademicFaculty.findOne({
         _id: new Types.ObjectId(id),
     });
-    return academicSemester;
+    return academicFaculty;
 };
 
 export const AcademicFacultyService = {
