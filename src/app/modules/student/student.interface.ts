@@ -5,6 +5,22 @@ export type IUserName = {
     lastName: string;
 };
 
+export type IGuardian = {
+    fatherName: string;
+    fatherOccupation: string;
+    fatherContactNo: string;
+    motherName: string;
+    motherOccupation: string;
+    motherContactNo: string;
+  };
+  
+  export type ILocalGuardian = {
+    name: string;
+    occupation: string;
+    contactNo: string;
+    address: string;
+  };
+
 export type IStudent = {
     id: string;
     user: Types.ObjectId;
@@ -15,10 +31,14 @@ export type IStudent = {
     dateOfBirth?: Date;
     contact?: string;
     avatar?: string;
+    permanentAddress: string;
+    guardian: IGuardian;
+    localGuardian: ILocalGuardian;
     academicDepartment: Types.ObjectId;
     admissionSemester: Types.ObjectId;
     bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
+    isDeleted: boolean;
 };
 
 

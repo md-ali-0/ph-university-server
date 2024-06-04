@@ -1,6 +1,12 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
-import { IStudent, IUserName, StudentModel } from './student.interface';
+import {
+    IGuardian,
+    ILocalGuardian,
+    IStudent,
+    IUserName,
+    StudentModel,
+} from './student.interface';
 
 const UserNameSchema = new Schema<IUserName>(
     {
@@ -36,12 +42,72 @@ const UserNameSchema = new Schema<IUserName>(
     },
 );
 
+const guardianSchema = new Schema<IGuardian>(
+    {
+        fatherName: {
+            type: String,
+            trim: true,
+            required: [true, 'Father Name is required'],
+        },
+        fatherOccupation: {
+            type: String,
+            trim: true,
+            required: [true, 'Father occupation is required'],
+        },
+        fatherContactNo: {
+            type: String,
+            required: [true, 'Father Contact No is required'],
+        },
+        motherName: {
+            type: String,
+            required: [true, 'Mother Name is required'],
+        },
+        motherOccupation: {
+            type: String,
+            required: [true, 'Mother occupation is required'],
+        },
+        motherContactNo: {
+            type: String,
+            required: [true, 'Mother Contact No is required'],
+        },
+    },
+    {
+        _id: false,
+        versionKey: false,
+    },
+);
+
+const localGuardianSchema = new Schema<ILocalGuardian>(
+    {
+        name: {
+            type: String,
+            required: [true, 'Name is required'],
+        },
+        occupation: {
+            type: String,
+            required: [true, 'Occupation is required'],
+        },
+        contactNo: {
+            type: String,
+            required: [true, 'Contact number is required'],
+        },
+        address: {
+            type: String,
+            required: [true, 'Address is required'],
+        },
+    },
+    {
+        _id: false,
+        versionKey: false,
+    },
+);
+
 const StudentSchema = new Schema<IStudent, StudentModel>(
     {
         id: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         user: {
             type: Schema.Types.ObjectId,
@@ -85,7 +151,20 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
             ref: 'AcademicSemester',
             required: true,
         },
+        guardian: {
+            type: guardianSchema,
+            required: [true, 'Guardian information is required'],
+        },
+        localGuardian: {
+            type: localGuardianSchema,
+            required: [true, 'Local guardian information is required'],
+        },
         presentAddress: { type: String, trim: true },
+        isDeleted: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
     {
         versionKey: false,
