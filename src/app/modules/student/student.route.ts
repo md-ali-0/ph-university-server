@@ -4,7 +4,7 @@ import { StudentController } from './student.controller';
 const router = Router();
 
 router.get('/:id', StudentController.getSingleStudent);
-router.get('/all', StudentController.getAllStudents);
+router.get('/', StudentController.getAllStudents);
 router.patch('/:id', StudentController.updateStudent);
 router.delete('/:id', StudentController.deleteStudent);
 
