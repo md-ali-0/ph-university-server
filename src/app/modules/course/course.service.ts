@@ -3,8 +3,8 @@ import { startSession } from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
 import { courseSearchableFields } from './course.constant';
-import { ICourse } from './course.interface';
-import { Course } from './course.model';
+import { ICourse, ICourseFaculty } from './course.interface';
+import { Course, CourseFaculty } from './course.model';
 
 const createCourse = async (payload: ICourse): Promise<ICourse | null> => {
     const result = await Course.create(payload);
@@ -30,6 +30,19 @@ const getAllCourses = async (
 const getSingleCourse = async (id: string): Promise<ICourse | null> => {
     const result = await Course.findById(id).populate(
         'preRequisiteCourses.course',
+    );
+    return result;
+};
+const createAssignFaculty = async (
+    id: string,
+    payload: Partial<ICourseFaculty>,
+): Promise<ICourseFaculty | null> => {
+    const result = await CourseFaculty.findByIdAndUpdate(
+        id,
+        {
+            $addToSet: { faculties: { $each: payload } },
+        },
+        { upsert: true, new: true },
     );
     return result;
 };
@@ -133,4 +146,5 @@ export const CourseService = {
     updateCourse,
     deleteCourse,
     getSingleCourse,
+    createAssignFaculty,
 };
