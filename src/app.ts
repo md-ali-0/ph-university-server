@@ -9,11 +9,11 @@ const app: Application = express();
 // Parser
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:5173'] }));
 
 app.use('/api/v1/', router);
 
-app.use("*", notFoundHandler)
+app.use('*', notFoundHandler);
 
 app.use(globalErrorHandler);
 export default app;
