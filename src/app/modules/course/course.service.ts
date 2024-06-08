@@ -40,9 +40,23 @@ const createAssignFaculty = async (
     const result = await CourseFaculty.findByIdAndUpdate(
         id,
         {
-            $addToSet: { faculties: { $each: payload } },
+            $addToSet: { course: id, faculties: { $each: payload } },
         },
         { upsert: true, new: true },
+    );
+    return result;
+};
+
+const removeCrouseFaculty = async (
+    id: string,
+    payload: Partial<ICourseFaculty>,
+): Promise<ICourseFaculty | null> => {
+    const result = await CourseFaculty.findByIdAndUpdate(
+        id,
+        {
+            $pull: { faculties: { $in: payload } },
+        },
+        { new: true },
     );
     return result;
 };
@@ -147,4 +161,5 @@ export const CourseService = {
     deleteCourse,
     getSingleCourse,
     createAssignFaculty,
+    removeCrouseFaculty
 };
