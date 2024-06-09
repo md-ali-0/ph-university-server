@@ -72,6 +72,4 @@ export default globalErrorHandler;
 success
 message
 errorSource
-
-
 */
