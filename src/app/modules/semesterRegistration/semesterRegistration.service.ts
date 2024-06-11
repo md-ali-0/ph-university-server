@@ -2,6 +2,7 @@ import { BAD_REQUEST, CONFLICT, NOT_FOUND } from 'http-status';
 import { Types } from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import { RegistrationStatus } from './semesterRegistration.constant';
 import { ISemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistration } from './semesterRegistration.model';
@@ -31,14 +32,20 @@ const createSemesterRegistration = async (
         );
     }
 
+
+
+    const checkingAcademicSemester = await AcademicSemester.findById(academicSemester);
+
+    if (!checkingAcademicSemester) {
+        throw new AppError(NOT_FOUND, 'Academic Semester not found');
+    }
+
+
     const isSemesterRegistrationExists =
         await SemesterRegistration.findById(academicSemester);
 
     const currentSemesterStatus = isSemesterRegistrationExists?.status;
     const requestedStatus = payload?.status;
-
-    if (!isSemesterRegistrationExists)
-        throw new AppError(NOT_FOUND, 'Academic Semester not found');
 
     if (academicSemester) {
         const isSemesterRegistrationExists = await SemesterRegistration.findOne(
