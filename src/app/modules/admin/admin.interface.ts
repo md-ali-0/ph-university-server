@@ -13,7 +13,6 @@ export type TBloodGroup =
 
 export type TUserName = {
   firstName: string;
-  middleName: string;
   lastName: string;
 };
 
@@ -26,11 +25,10 @@ export type TAdmin = {
   dateOfBirth?: Date;
   email: string;
   contactNo: string;
-  emergencyContactNo: string;
-  bloogGroup?: TBloodGroup;
+  bloodGroup?: TBloodGroup;
   presentAddress: string;
   permanentAddress: string;
-  profileImg?: string;
+  avatar?: string;
   isDeleted: boolean;
 };
 

@@ -1,18 +1,19 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { IUser } from './user.interface';
+import { IUser, UserModel } from './user.interface';
 
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser, UserModel>(
     {
         id: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         password: {
             type: String,
             required: true,
+            select: 0,
         },
         needChangePassword: {
             type: Boolean,
@@ -35,6 +36,9 @@ const userSchema = new Schema<IUser>(
             required: true,
             default: false,
         },
+        passwordChangeAt: {
+            type: Date,
+        },
     },
     {
         versionKey: false,
@@ -49,4 +53,21 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-export const User = model<IUser>('user', userSchema);
+userSchema.static('isUserExistsByCustomId', async function (id: string) {
+    return await User.findOne({ id }).select('+password');
+});
+userSchema.static('isUserDeleted', async function (isDeleted) {
+    return isDeleted;
+});
+userSchema.static('isUserBlocked', async function (status: string) {
+    return status === 'blocked';
+});
+
+userSchema.static(
+    'isUserPasswordMatched',
+    async function (planePassword, hashPassword) {
+        return await bcrypt.compare(planePassword, hashPassword);
+    },
+);
+
+export const User = model<IUser, UserModel>('user', userSchema);

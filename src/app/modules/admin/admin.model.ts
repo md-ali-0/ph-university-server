@@ -9,10 +9,6 @@ const userNameSchema = new Schema<TUserName>({
     trim: true,
     maxlength: [20, 'Name can not be more than 20 characters'],
   },
-  middleName: {
-    type: String,
-    trim: true,
-  },
   lastName: {
     type: String,
     trim: true,
@@ -57,11 +53,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
       unique: true,
     },
     contactNo: { type: String, required: [true, 'Contact number is required'] },
-    emergencyContactNo: {
-      type: String,
-      required: [true, 'Emergency contact number is required'],
-    },
-    bloogGroup: {
+    bloodGroup: {
       type: String,
       enum: {
         values: BloodGroup,
@@ -76,7 +68,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    profileImg: { type: String },
+    avatar: { type: String },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -93,8 +85,6 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
 adminSchema.virtual('fullName').get(function () {
   return (
     this?.name?.firstName +
-    '' +
-    this?.name?.middleName +
     '' +
     this?.name?.lastName
   );
