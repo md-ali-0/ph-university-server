@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import { auth } from '../../middleware/auth';
 import { requestValidation } from '../../middleware/validateRequest';
+import { USER_ROLE } from '../user/user.constant';
 import { CourseController } from './course.controller';
 import { CourseValidations, createFacultyCourseSchema, removeFacultyCourseSchema } from './course.validation';
 
@@ -7,11 +9,13 @@ const router = Router();
 
 router.post(
     '/',
+    auth(USER_ROLE.admin),
     requestValidation(CourseValidations.createCourseValidationSchema),
     CourseController.createCourse,
 );
 router.patch(
     '/:id',
+    auth(USER_ROLE.admin),
     requestValidation(CourseValidations.updateCourseValidationSchema),
     CourseController.updateCourse,
 );

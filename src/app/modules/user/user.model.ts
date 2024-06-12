@@ -70,4 +70,13 @@ userSchema.static(
     },
 );
 
+userSchema.static(
+    'isJWTissuedBeforePasswordChange',
+    async function (passwordChangeTime: Date, JwtIssuedTime: number) {
+        const passwordChangeAtTime =
+            new Date(passwordChangeTime).getTime() / 1000;
+
+        return passwordChangeAtTime > JwtIssuedTime;
+    },
+);
 export const User = model<IUser, UserModel>('user', userSchema);
