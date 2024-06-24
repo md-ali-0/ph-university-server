@@ -12,6 +12,7 @@ router.post(
     requestValidation(authValidation.loginValidationSchema),
     AuthController.loginUser,
 );
+
 router.post(
     '/change-password',
     auth(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.faculty),
@@ -24,5 +25,17 @@ router.post(
     requestValidation(authValidation.refreshTokenValidationSchema),
     AuthController.getRefreshToken,
 );
+
+router.post(
+    '/forget-password',
+    requestValidation(authValidation.forgetPasswordValidationSchema),
+    AuthController.forgetPassword,
+);
+
+router.post(
+    '/reset-password',
+    requestValidation(authValidation.resetPasswordValidationSchema),
+    AuthController.resetPassword,
+  );
 
 export const AuthRoute = router;

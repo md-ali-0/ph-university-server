@@ -23,6 +23,7 @@ const createStudent = async (password: string, payload: IStudent) => {
 
     userData.password = password || (config.default_password as string);
     userData.role = 'student';
+    userData.email = payload.email
 
     // menually genereated id
 
@@ -79,6 +80,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 
     //set student role
     userData.role = 'faculty';
+    userData.email = payload.email
 
     // find academic department info
     const academicDepartment = await AcademicDepartment.findById(
@@ -138,6 +140,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
 
     //set student role
     userData.role = 'admin';
+    userData.email = payload.email
 
     const session = await startSession();
 
