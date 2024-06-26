@@ -23,7 +23,7 @@ const createStudent = async (password: string, payload: IStudent) => {
 
     userData.password = password || (config.default_password as string);
     userData.role = 'student';
-    userData.email = payload.email
+    userData.email = payload.email;
 
     // menually genereated id
 
@@ -80,7 +80,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 
     //set student role
     userData.role = 'faculty';
-    userData.email = payload.email
+    userData.email = payload.email;
 
     // find academic department info
     const academicDepartment = await AcademicDepartment.findById(
@@ -121,13 +121,13 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
         }
 
         await session.commitTransaction();
-        await session.endSession();
-
         return newFaculty;
-    } catch (err: any) {
+        
+    } catch (err) {
         await session.abortTransaction();
+        throw err
+    } finally {
         await session.endSession();
-        throw new Error(err);
     }
 };
 
@@ -140,7 +140,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
 
     //set student role
     userData.role = 'admin';
-    userData.email = payload.email
+    userData.email = payload.email;
 
     const session = await startSession();
 
@@ -176,17 +176,45 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
         await session.commitTransaction();
 
         return newAdmin;
-    } catch (err: any) {
+    } catch (err) {
         await session.abortTransaction();
 
-        throw new Error(err);
+        throw err;
     } finally {
         await session.endSession();
     }
+};
+
+const getMe = async (userId: string, role: string) => {
+    // const decoded = verifyToken(token, config.jwt_access_secret as string);
+    // const { userId, role } = decoded;
+
+    let result = null;
+    if (role === 'student') {
+        result = await Student.findOne({ id: userId }).populate('user');
+    }
+    if (role === 'admin') {
+        result = await Admin.findOne({ id: userId }).populate('user');
+    }
+
+    if (role === 'faculty') {
+        result = await Faculty.findOne({ id: userId }).populate('user');
+    }
+
+    return result;
+};
+
+const changeStatus = async (id: string, payload: { status: string }) => {
+    const result = await User.findByIdAndUpdate(id, payload, {
+        new: true,
+    });
+    return result;
 };
 
 export const UserService = {
     createStudent,
     createFacultyIntoDB,
     createAdminIntoDB,
+    getMe,
+    changeStatus,
 };

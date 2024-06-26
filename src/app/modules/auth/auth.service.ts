@@ -6,7 +6,7 @@ import AppError from '../../error/AppError';
 import { sendEmail } from '../../utils/sendEmail';
 import { User } from '../user/user.model';
 import { ILoginUser } from './auth.interface';
-import { createToken } from './auth.utils';
+import { createToken, verifyToken } from './auth.utils';
 
 const loginUser = async (payload: ILoginUser) => {
     const { password } = payload;
@@ -103,7 +103,7 @@ const changePassword = async (
 const getRefreshToken = async (token: string) => {
     // verify token
 
-    const decoded = jwt.verify(token, config.jwt_refresh_secret as string);
+    const decoded = await verifyToken(token, config.jwt_refresh_secret as string);
 
     const { user, iat } = decoded as JwtPayload;
 
