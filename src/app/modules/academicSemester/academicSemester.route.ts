@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import { auth } from '../../middleware/auth';
 import { requestValidation } from '../../middleware/validateRequest';
+import { USER_ROLE } from '../user/user.constant';
 import { AcademicSemesterController } from './academicSemester.controller';
 import { AcademicSemesterValidation } from './academicSemester.validation';
 
@@ -21,7 +23,7 @@ router.patch(
     AcademicSemesterController.updateAcademicSemester,
 );
 
-router.get('/all', AcademicSemesterController.getAllAcademicSemesters);
+router.get('/all', auth(USER_ROLE.admin), AcademicSemesterController.getAllAcademicSemesters);
 router.get('/:semesterId', AcademicSemesterController.getSingleAcademicSemester);
 
 export const AcademicSemesterRoute = router;

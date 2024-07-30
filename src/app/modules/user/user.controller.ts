@@ -9,7 +9,11 @@ const createStudent = catchAsync(async (req, res) => {
 
     // const zodParseData = userValidationSchema.parse(payload)
 
-    const result = await UserService.createStudent(password, studentData);
+    const result = await UserService.createStudent(
+        req.file,
+        password,
+        studentData,
+    );
 
     sendResponse(res, {
         statusCode: httpStatus.ACCEPTED,
@@ -22,7 +26,11 @@ const createStudent = catchAsync(async (req, res) => {
 const createFaculty = catchAsync(async (req, res) => {
     const { password, faculty: facultyData } = req.body;
 
-    const result = await UserService.createFacultyIntoDB(password, facultyData);
+    const result = await UserService.createFacultyIntoDB(
+        req.file,
+        password,
+        facultyData,
+    );
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -35,7 +43,11 @@ const createFaculty = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
     const { password, admin: adminData } = req.body;
 
-    const result = await UserService.createAdminIntoDB(password, adminData);
+    const result = await UserService.createAdminIntoDB(
+        req.file,
+        password,
+        adminData,
+    );
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -82,5 +94,5 @@ export const UserController = {
     createFaculty,
     createAdmin,
     getMe,
-    changeStatus
+    changeStatus,
 };

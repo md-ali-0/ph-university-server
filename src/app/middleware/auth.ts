@@ -20,11 +20,15 @@ export const auth = (...requestRoles: IUserRole[]) => {
             }
 
             // verify token
-
-            const decoded = jwt.verify(
-                token,
-                config.jwt_access_secret as string,
-            );
+            let decoded
+            try {
+                 decoded = jwt.verify(
+                    token,
+                    config.jwt_access_secret as string,
+                );
+            } catch (error) {
+                throw new AppError(httpStatus.UNAUTHORIZED, 'UnAuthorized');
+            }
 
             const { user, role, iat } = decoded as JwtPayload;
 
@@ -55,7 +59,10 @@ export const auth = (...requestRoles: IUserRole[]) => {
                     iat as number,
                 ))
             ) {
-                throw new AppError(httpStatus.FORBIDDEN, 'You are not Authorized');
+                throw new AppError(
+                    httpStatus.FORBIDDEN,
+                    'You are not Authorized',
+                );
             }
 
             if (requestRoles && !requestRoles.includes(role)) {

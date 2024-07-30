@@ -37,7 +37,6 @@ const createStudentValidationSchema = z.object({
             }),
             dateOfBirth: z.string().optional(),
             contact: z.string().trim(),
-            avatar: z.string().trim(),
             bloodGroup: z.enum([
                 'A+',
                 'A-',
@@ -48,7 +47,9 @@ const createStudentValidationSchema = z.object({
                 'O+',
                 'O-',
             ]),
-            admissionSemester: z.string({ required_error: "Academic Semester is Required"}),
+            admissionSemester: z.string({
+                required_error: 'Academic Semester is Required',
+            }),
             presentAddress: z.string().trim(),
         }),
     }),
