@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import { IAcademicDepartment } from './academicDepartment.interface';
 import { AcademicDepartment } from './academicDepartment.model';
 
@@ -19,10 +20,24 @@ const updateAcademicDepartment = async (
     return academicDepartment;
 };
 
-const getAllAcademicDepartments = async (): Promise<IAcademicDepartment[]> => {
-    const academicDepartments =
-        await AcademicDepartment.find().populate('academicFaculty');
-    return academicDepartments;
+const getAllAcademicDepartments = async (query: Record<string, unknown>) => {
+    const academicDepartmentQuery = new QueryBuilder(
+        AcademicDepartment.find().populate('academicFaculty'),
+        query,
+    )
+        .search(['name'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const result = await academicDepartmentQuery.modelQuery;
+    const meta = await academicDepartmentQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
 };
 
 const getSingleAcademicDepartment = async (

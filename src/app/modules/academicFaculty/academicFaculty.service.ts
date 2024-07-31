@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import { IAcademicFaculty } from './academicFaculty.interface';
 import { AcademicFaculty } from './academicFaculty.model';
 
@@ -19,11 +20,22 @@ const updateAcademicFaculty = async (
     return academicFaculty;
 };
 
-const getAllAcademicFaculties = async (): Promise<IAcademicFaculty[]> => {
-    const academicFaculties = await AcademicFaculty.find();
-    return academicFaculties;
-};
+const getAllAcademicFaculties = async (query: Record<string, unknown>) => {
+    const academicFacultyQuery = new QueryBuilder(AcademicFaculty.find(), query)
+        .search(['name'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
 
+    const result = await academicFacultyQuery.modelQuery;
+    const meta = await academicFacultyQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
+};
 const getSingleAcademicFaculty = async (
     id: string,
 ): Promise<IAcademicFaculty | null> => {

@@ -34,12 +34,15 @@ const updateAcademicDepartment = catchAsync(async (req, res) => {
 });
 
 const getAllAcademicDepartments = catchAsync(async (req, res) => {
-    const result = await AcademicDepartmentService.getAllAcademicDepartments();
+    const result = await AcademicDepartmentService.getAllAcademicDepartments(
+        req.query,
+    );
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'AcademicDepartment fetched Successfully',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 });
 

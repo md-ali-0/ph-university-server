@@ -34,12 +34,15 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
 });
 
 const getAllAcademicFaculties = catchAsync(async (req, res) => {
-    const result = await AcademicFacultyService.getAllAcademicFaculties();
+    const result = await AcademicFacultyService.getAllAcademicFaculties(
+        req.query,
+    );
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'AcademicFaculty fetched Successfully',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 });
 

@@ -30,6 +30,13 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     };
 };
 
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+    const result = await CourseFaculty.findOne({ course: courseId }).populate(
+        'faculties',
+    );
+    return result;
+};
+
 const getSingleCourse = async (id: string): Promise<ICourse | null> => {
     const result = await Course.findById(id).populate(
         'preRequisiteCourses.course',
@@ -165,4 +172,5 @@ export const CourseService = {
     getSingleCourse,
     createAssignFaculty,
     removeCrouseFaculty,
+    getFacultiesWithCourseFromDB,
 };

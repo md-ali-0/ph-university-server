@@ -22,7 +22,10 @@ const createSemesterRegistration = async (
     // check if their any semester upcoming
 
     const isAcademicSemesterExists = await SemesterRegistration.findOne({
-        $or: [{ status: RegistrationStatus.upcoming }, { status: RegistrationStatus.ongoing }],
+        $or: [
+            { status: RegistrationStatus.upcoming },
+            { status: RegistrationStatus.ongoing },
+        ],
     });
 
     if (isAcademicSemesterExists) {
@@ -32,14 +35,12 @@ const createSemesterRegistration = async (
         );
     }
 
-
-
-    const checkingAcademicSemester = await AcademicSemester.findById(academicSemester);
+    const checkingAcademicSemester =
+        await AcademicSemester.findById(academicSemester);
 
     if (!checkingAcademicSemester) {
         throw new AppError(NOT_FOUND, 'Academic Semester not found');
     }
-
 
     const isSemesterRegistrationExists =
         await SemesterRegistration.findById(academicSemester);
@@ -66,14 +67,20 @@ const createSemesterRegistration = async (
     }
 
     // UPCOMING --> ONGOING --> ENDED
-    if (currentSemesterStatus === RegistrationStatus.upcoming && requestedStatus === RegistrationStatus.ended) {
+    if (
+        currentSemesterStatus === RegistrationStatus.upcoming &&
+        requestedStatus === RegistrationStatus.ended
+    ) {
         throw new AppError(
             BAD_REQUEST,
             `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
         );
     }
 
-    if (currentSemesterStatus === RegistrationStatus.ongoing && requestedStatus === RegistrationStatus.upcoming) {
+    if (
+        currentSemesterStatus === RegistrationStatus.ongoing &&
+        requestedStatus === RegistrationStatus.upcoming
+    ) {
         throw new AppError(
             BAD_REQUEST,
             `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
@@ -105,9 +112,7 @@ const updateSemesterRegistration = async (
     return semesterRegistration;
 };
 
-const getAllSemesterRegistration = async (
-    query: Record<string, unknown>,
-): Promise<ISemesterRegistration[] | null> => {
+const getAllSemesterRegistration = async (query: Record<string, unknown>) => {
     const semesterRegistrationQuery = new QueryBuilder(
         SemesterRegistration.find().populate('academicSemester'),
         query,
@@ -115,11 +120,16 @@ const getAllSemesterRegistration = async (
         .filter()
         .sort()
         .paginate()
-        .limit()
         .fields();
-    const semesterRegistration = await semesterRegistrationQuery.modelQuery;
-    return semesterRegistration;
+
+    const result = await semesterRegistrationQuery.modelQuery;
+    const meta = await semesterRegistrationQuery.countTotal();
+    return {
+        result,
+        meta,
+    };
 };
+
 const getSingleSemesterRegistration = async (
     id: string,
 ): Promise<ISemesterRegistration | null> => {

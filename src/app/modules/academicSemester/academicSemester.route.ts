@@ -9,6 +9,7 @@ const router = Router();
 
 router.post(
     '/create-academic-semester',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     requestValidation(
         AcademicSemesterValidation.createAcademicSemesterValidationSchema,
     ),
@@ -17,13 +18,32 @@ router.post(
 
 router.patch(
     '/:semesterId',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     requestValidation(
         AcademicSemesterValidation.updateAcademicSemesterValidationSchema,
     ),
     AcademicSemesterController.updateAcademicSemester,
 );
 
-router.get('/all', auth(USER_ROLE.admin), AcademicSemesterController.getAllAcademicSemesters);
-router.get('/:semesterId', AcademicSemesterController.getSingleAcademicSemester);
+router.get(
+    '/all',
+    auth(
+        USER_ROLE.superAdmin,
+        USER_ROLE.admin,
+        USER_ROLE.faculty,
+        USER_ROLE.student,
+    ),
+    AcademicSemesterController.getAllAcademicSemesters,
+);
+router.get(
+    '/:semesterId',
+    auth(
+        USER_ROLE.superAdmin,
+        USER_ROLE.admin,
+        USER_ROLE.faculty,
+        USER_ROLE.student,
+    ),
+    AcademicSemesterController.getSingleAcademicSemester,
+);
 
 export const AcademicSemesterRoute = router;

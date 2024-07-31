@@ -17,8 +17,10 @@ const createSemesterRegistration = catchAsync(async (req, res) => {
 const updateSemesterRegistration = catchAsync(async (req, res) => {
     const id = req?.params?.id;
     const payload = req.body;
-    const result =
-        await SemesterRegistrationService.updateSemesterRegistration(id, payload);
+    const result = await SemesterRegistrationService.updateSemesterRegistration(
+        id,
+        payload,
+    );
     sendResponse(res, {
         statusCode: httpStatus.ACCEPTED,
         success: true,
@@ -35,7 +37,8 @@ const getAllSemesterRegistration = catchAsync(async (req, res) => {
         statusCode: httpStatus.ACCEPTED,
         success: true,
         message: 'SemesterRegistration Fetch Successfully',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 });
 const getSingleSemesterRegistration = catchAsync(async (req, res) => {
