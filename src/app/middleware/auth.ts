@@ -20,12 +20,9 @@ export const auth = (...requestRoles: IUserRole[]) => {
             }
 
             // verify token
-            let decoded
+            let decoded;
             try {
-                 decoded = jwt.verify(
-                    token,
-                    config.jwt_access_secret as string,
-                );
+                decoded = jwt.verify(token, config.jwt_access_secret as string);
             } catch (error) {
                 throw new AppError(httpStatus.UNAUTHORIZED, 'UnAuthorized');
             }

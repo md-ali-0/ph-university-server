@@ -7,15 +7,23 @@ const router = Router();
 
 router.get(
     '/:id',
-    auth(USER_ROLE.admin, USER_ROLE.faculty),
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty),
     StudentController.getSingleStudent,
 );
 router.get(
     '/',
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty),
     StudentController.getAllStudents,
 );
-router.patch('/:id', auth(USER_ROLE.admin), StudentController.updateStudent);
-router.delete('/:id', auth(USER_ROLE.admin), StudentController.deleteStudent);
+router.patch(
+    '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    StudentController.updateStudent,
+);
+router.delete(
+    '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    StudentController.deleteStudent,
+);
 
 export const StudentRoute = router;

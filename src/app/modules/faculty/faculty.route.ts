@@ -8,16 +8,29 @@ import { updateFacultyValidationSchema } from './faculty.validation';
 
 const router = express.Router();
 
-router.get('/:id', FacultyController.getSingleFaculty);
+router.get(
+    '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty),
+    FacultyController.getSingleFaculty,
+);
 
 router.patch(
     '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     requestValidation(updateFacultyValidationSchema),
     FacultyController.updateFaculty,
 );
 
-router.delete('/:id', FacultyController.deleteFaculty);
+router.delete(
+    '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    FacultyController.deleteFaculty,
+);
 
-router.get('/', auth(USER_ROLE.admin), FacultyController.getAllFaculties);
+router.get(
+    '/',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    FacultyController.getAllFaculties,
+);
 
 export const FacultyRoute = router;

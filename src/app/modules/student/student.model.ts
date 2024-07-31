@@ -146,6 +146,10 @@ const StudentSchema = new Schema<IStudent, StudentModel>(
             ref: 'AcademicDepartment',
             required: true,
         },
+        academicFaculty: {
+            type: Schema.Types.ObjectId,
+            ref: 'AcademicFaculty',
+        },
         admissionSemester: {
             type: Schema.Types.ObjectId,
             ref: 'AcademicSemester',

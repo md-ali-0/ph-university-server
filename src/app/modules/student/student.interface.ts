@@ -1,4 +1,4 @@
-import { Model, Types } from "mongoose";
+import { Model, Types } from 'mongoose';
 
 export type IUserName = {
     firstName: string;
@@ -12,14 +12,14 @@ export type IGuardian = {
     motherName: string;
     motherOccupation: string;
     motherContactNo: string;
-  };
-  
-  export type ILocalGuardian = {
+};
+
+export type ILocalGuardian = {
     name: string;
     occupation: string;
     contactNo: string;
     address: string;
-  };
+};
 
 export type IStudent = {
     id: string;
@@ -34,13 +34,13 @@ export type IStudent = {
     permanentAddress: string;
     guardian: IGuardian;
     localGuardian: ILocalGuardian;
-    academicDepartment: Types.ObjectId;
     admissionSemester: Types.ObjectId;
+    academicDepartment: Types.ObjectId;
+    academicFaculty: Types.ObjectId;
     bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
     isDeleted: boolean;
 };
-
 
 // export type IStudentMethod = {
 //     isUserExits(id: number) : Promise<IStudent | null>
@@ -49,5 +49,5 @@ export type IStudent = {
 // export type StudentModel = Model<IStudent, {}, IStudentMethod>;
 
 export interface StudentModel extends Model<IStudent> {
-    isUserExits(id: number) : Promise<IStudent | null>
+    isUserExits(id: number): Promise<IStudent | null>;
 }

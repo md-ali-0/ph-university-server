@@ -11,9 +11,7 @@ const createCourse = async (payload: ICourse): Promise<ICourse | null> => {
     return result;
 };
 
-const getAllCourses = async (
-    query: Record<string, unknown>,
-): Promise<ICourse[] | null> => {
+const getAllCourses = async (query: Record<string, unknown>) => {
     const CourseQuery = new QueryBuilder(
         Course.find().populate('preRequisiteCourses.course'),
         query,
@@ -24,7 +22,12 @@ const getAllCourses = async (
         .paginate()
         .limit();
     const result = await CourseQuery.modelQuery;
-    return result;
+    const meta = await CourseQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
 };
 
 const getSingleCourse = async (id: string): Promise<ICourse | null> => {
@@ -161,5 +164,5 @@ export const CourseService = {
     deleteCourse,
     getSingleCourse,
     createAssignFaculty,
-    removeCrouseFaculty
+    removeCrouseFaculty,
 };

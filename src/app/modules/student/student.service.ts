@@ -7,9 +7,7 @@ import { IStudent } from './student.interface';
 import { Student } from './student.model';
 import { studentSearchableFields } from './students.constant';
 
-const getAllStudents = async (
-    query: Record<string, unknown>,
-): Promise<IStudent[] | null> => {
+const getAllStudents = async (query: Record<string, unknown>) => {
     // let searchTerm: unknown = '';
 
     // const queryObject = { ...query };
@@ -93,8 +91,12 @@ const getAllStudents = async (
         .paginate();
 
     const result = await studentQuery.modelQuery;
+    const meta = await studentQuery.countTotal();
 
-    return result;
+    return {
+        meta,
+        result,
+    };
 };
 
 const updateStudent = async (
